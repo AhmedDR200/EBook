@@ -2,6 +2,7 @@ from rest_framework import generics, mixins
 from .serializers import EbookSerializer, ReviewSerializer
 from .models import Ebook, Review
 from rest_framework import permissions
+from .pagination import SmallSet
 
 
 class EbookListCreate(generics.GenericAPIView,
@@ -39,8 +40,10 @@ class EbookDetail(generics.GenericAPIView,
 
 
 class Reviews(generics.ListCreateAPIView):
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().order_by("-id")
     serializer_class = ReviewSerializer
+    permission_classes = (permissions.AllowAny, )
+    pagination_class = SmallSet
 
 
 class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
